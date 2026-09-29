@@ -1,0 +1,109 @@
+:root {
+    --bg-color: #0b0f19;
+    --card-bg: #151c2e;
+    --accent-color: #00f2fe;
+    --accent-glow: rgba(0, 242, 254, 0.25);
+    --text-color: #e2e8f0;
+    --text-muted: #cbd5e1;
+    --border-color: #232d45;
+    --hover-border: #38bdf8;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-custom {
+    background-color: var(--card-bg);
+    border-bottom: 2px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+
+footer {
+    background-color: var(--card-bg);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.lead {
+    color: #e2e8f0 !important;
+}
+
+footer p {
+    color: #94a3b8 !important;
+}
+
+.rounded-3 {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rounded-3:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 8px 25px var(--accent-glow);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
+}
+
+.builder-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.builder-table th, 
+.builder-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.builder-table th {
+    background-color: #0f1626;
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.builder-table tr:last-child td {
+    border-bottom: none;
+}
+
+.summary-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--accent-color);
+    border-radius: 12px;
+    padding: 25px;
+    position: sticky;
+    top: 90px;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
