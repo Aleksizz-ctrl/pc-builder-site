@@ -120,7 +120,7 @@ footer p {
     width: 100%;
     height: 200px;
     object-fit: contain;
-    padding: 10px;
+    padding: 15px;
 }
 
 .product-card {
@@ -144,9 +144,13 @@ footer p {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    flex-grow: 1;
+    flex-grow: 1;   
+}
+
+.product-info a {
     margin-top: auto;
 }
+
 .product-info h5 {
     color: var(--accent-color);
     margin-bottom: 10px;
