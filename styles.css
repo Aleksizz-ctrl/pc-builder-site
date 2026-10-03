@@ -188,3 +188,59 @@ footer p {
     background-color: var(--card-bg);
     box-shadow: 0 4px 15px var(--accent-glow);
 }
+/* Participant 3: shared accessibility, contact page, and responsive layouts. */
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+img { max-width: 100%; }
+:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 4px; }
+.skip-link { position: fixed; top: -100px; left: 16px; z-index: 1100; padding: 12px 20px; background: var(--accent-color); color: var(--bg-color); }
+.skip-link:focus { top: 12px; }
+.contact-heading { max-width: 760px; }
+.contact-heading h1 { color: var(--accent-color); font-size: clamp(2rem, 4vw, 3.25rem); }
+.eyebrow { color: var(--accent-color); font-size: .75rem; font-weight: 700; letter-spacing: .13em; }
+.contact-panel, .faq-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; }
+.contact-link { color: var(--accent-color); text-underline-offset: 4px; overflow-wrap: anywhere; }
+.contact-link:hover { color: #fff; }
+.contact-panel .form-control, .contact-panel .form-select { background-color: var(--bg-color); color: var(--text-color); border-color: #59667f; min-height: 48px; color-scheme: dark; }
+.contact-panel .form-select { --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cbd5e1' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
+.contact-panel .form-control::placeholder { color: #9caac0; }
+.contact-panel .form-control:focus, .contact-panel .form-select:focus { border-color: var(--accent-color); box-shadow: 0 0 0 .2rem var(--accent-glow); }
+.contact-panel .form-text { color: var(--text-muted); }
+.form-status { padding: 16px; border-left: 3px solid var(--accent-color); background: var(--bg-color); }
+.faq-section { max-width: 900px; }
+.faq-item { margin-bottom: 12px; }
+.faq-item summary { padding: 20px 24px; cursor: pointer; font-weight: 600; }
+.faq-item[open] summary { color: var(--accent-color); }
+.faq-item p { padding: 0 24px 20px; margin: 0; color: var(--text-muted); }
+.table-responsive { border-radius: 12px; }
+.builder-table { min-width: 680px; }
+.builder-table .form-select { min-width: 240px; }
+.comparison-table { min-width: 620px; }
+
+/* Tablet: two catalog columns and a summary below the configurator. */
+@media (max-width: 991.98px) {
+    .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 24px; }
+    .summary-card { position: static; }
+    .navbar-collapse { padding: 12px 0; }
+    .navbar-nav .nav-link { padding: 12px 8px; }
+    .navbar-nav .nav-link.active { background: var(--bg-color); border-radius: 6px; }
+}
+
+/* Mobile: single-column cards, roomy controls, and contained table scrolling. */
+@media (max-width: 575.98px) {
+    .catalog-grid { grid-template-columns: minmax(0, 1fr); padding: 0 12px; gap: 16px; }
+    .navbar-brand { font-size: 1.2rem; }
+    .contact-heading { margin-bottom: 28px !important; }
+    .contact-panel { padding: 20px !important; }
+    .contact-panel button[type="submit"] { width: 100%; }
+    .faq-item summary { padding: 18px; }
+    .faq-item p { padding: 0 18px 18px; }
+    .builder-table th, .builder-table td { padding: 12px; }
+    .summary-card { padding: 20px; }
+    .summary-card .d-flex { gap: 8px; flex-wrap: wrap; }
+    footer { padding-left: 16px; padding-right: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
