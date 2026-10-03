@@ -113,13 +113,14 @@ footer p {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     padding: 20px;
+    padding: 0 30px;
 }
 
 .product-image {
     width: 100%;
     height: 200px;
-    object-fit: cover;
-    object-position: contain;
+    object-fit: contain;
+    padding: 10px;
 }
 
 .product-card {
@@ -130,6 +131,7 @@ footer p {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .product-card:hover {
@@ -154,4 +156,31 @@ footer p {
 .product-info p{
     color: var(--text-muted);
     margin-bottom: 15px;
+}
+
+.comparison-table {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.comparison-table th {
+    color: var(--accent-color);
+    background-color: var(--card-bg);
+}
+
+.comparison-table td {
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.comparison-table tr:hover {
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 15px var(--accent-glow);
 }
