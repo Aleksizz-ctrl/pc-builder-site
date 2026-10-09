@@ -14,7 +14,7 @@ A five-page responsive student website for exploring PC components, comparing pr
 
 ## Team contributions
 
-### Participant 1 — Frontend & Core Layout
+### Слава — Frontend & Core Layout
 
 **Main files:** `index.html`, `builder.html`, and the shared base styles in `styles.css`.
 
@@ -24,7 +24,7 @@ A five-page responsive student website for exploring PC components, comparing pr
 - Added a build summary displaying sample prices, power figures, and compatibility information. These values are static in the current demo.
 - Defined the shared dark/cyan color palette, CSS variables, typography, spacing, and base component styles.
 
-### Participant 2 — Components Catalog & Comparison
+### Альтаир — Components Catalog & Comparison
 
 **Main files:** `catalog.html`, `prebuilt.html`, product images, and catalog/comparison styles in `styles.css`.
 
@@ -34,7 +34,7 @@ A five-page responsive student website for exploring PC components, comparing pr
 - Added a comparison table covering processors, graphics cards, memory, storage, power supplies, cooling, use cases, and prices.
 - Used `rowspan` and `colspan` to merge table cells and added custom card and table styling.
 
-### Participant 3 — UI/UX & Responsive Design
+### Дарын — UI/UX & Responsive Design
 
 **Main files:** `contact.html`, `contact.js`, responsive styles in `styles.css`, Bootstrap assets, and `README.md`.
 
