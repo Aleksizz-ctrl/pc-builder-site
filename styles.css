@@ -188,7 +188,7 @@ footer p {
     background-color: var(--card-bg);
     box-shadow: 0 4px 15px var(--accent-glow);
 }
-/* Participant 3: shared accessibility, contact page, and responsive layouts. */
+
 body { min-height: 100vh; display: flex; flex-direction: column; }
 main { flex: 1; }
 img { max-width: 100%; }
@@ -217,7 +217,7 @@ img { max-width: 100%; }
 .builder-table .form-select { min-width: 240px; }
 .comparison-table { min-width: 620px; }
 
-/* Tablet: two catalog columns and a summary below the configurator. */
+
 @media (max-width: 991.98px) {
     .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 24px; }
     .summary-card { position: static; }
@@ -226,7 +226,7 @@ img { max-width: 100%; }
     .navbar-nav .nav-link.active { background: var(--bg-color); border-radius: 6px; }
 }
 
-/* Mobile: single-column cards, roomy controls, and contained table scrolling. */
+
 @media (max-width: 575.98px) {
     .catalog-grid { grid-template-columns: minmax(0, 1fr); padding: 0 12px; gap: 16px; }
     .navbar-brand { font-size: 1.2rem; }
