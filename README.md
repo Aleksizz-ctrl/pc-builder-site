@@ -2,6 +2,8 @@
 
 A five-page responsive student website for exploring PC components, comparing pre-built computers, and planning a custom build. Built with HTML5, CSS3, Bootstrap 5.3.0, and a small vanilla JavaScript form demo.
 
+**Live website:** [Computer Builder Site](https://aleksizz-ctrl.github.io/pc-builder-site/)
+
 ## Pages
 
 - `index.html` — home page and project benefits.
@@ -10,7 +12,31 @@ A five-page responsive student website for exploring PC components, comparing pr
 - `prebuilt.html` — ready-made computers and a comparison table using rowspan and colspan.
 - `contact.html` — custom build/support form, project contact, and FAQ.
 
-## Participant 3 contribution
+## Team contributions
+
+### Participant 1 — Frontend & Core Layout
+
+**Main files:** `index.html`, `builder.html`, and the shared base styles in `styles.css`.
+
+- Built the home page with a hero banner, project benefits, and links to the configurator and catalog.
+- Created the shared navigation bar and footer used across the website.
+- Built the configurator layout using an HTML table and dropdowns for CPU, GPU, motherboard, RAM, storage, and power supply selection.
+- Added a build summary displaying sample prices, power figures, and compatibility information. These values are static in the current demo.
+- Defined the shared dark/cyan color palette, CSS variables, typography, spacing, and base component styles.
+
+### Participant 2 — Components Catalog & Comparison
+
+**Main files:** `catalog.html`, `prebuilt.html`, product images, and catalog/comparison styles in `styles.css`.
+
+- Built the component catalog with a CSS Grid layout.
+- Used Flexbox inside catalog cards to arrange images, category names, descriptions, and buttons.
+- Created the pre-built PC page with images, descriptions, and sample prices for three builds.
+- Added a comparison table covering processors, graphics cards, memory, storage, power supplies, cooling, use cases, and prices.
+- Used `rowspan` and `colspan` to merge table cells and added custom card and table styling.
+
+### Participant 3 — UI/UX & Responsive Design
+
+**Main files:** `contact.html`, `contact.js`, responsive styles in `styles.css`, Bootstrap assets, and `README.md`.
 
 - Added Contact Us in the existing dark/cyan theme, retaining English to match the other pages.
 - Used Bootstrap `row`, `col-lg-8`, `col-lg-4`, `col-md-6`, spacing, containers, and button utilities.
@@ -20,6 +46,7 @@ A five-page responsive student website for exploring PC components, comparing pr
 - Connected Bootstrap JavaScript on all five pages so mobile navigation works everywhere.
 - Added navigation labels, active-page markers, a skip link, visible keyboard focus, and reduced-motion support.
 - Included Bootstrap locally in `vendor/bootstrap/`, with its MIT license, for offline use.
+- Prepared the project documentation and GitHub Pages publishing instructions.
 
 ## Run locally
 
@@ -35,7 +62,7 @@ Open `index.html` in your browser. No installation or build step is required. Al
 
 Repository: https://github.com/Aleksizz-ctrl/pc-builder-site
 
-Deployment status: prepared locally; online publication has not been performed or verified.
+The project is published on [GitHub Pages](https://aleksizz-ctrl.github.io/pc-builder-site/).
 
 ## Validation
 
@@ -43,6 +70,6 @@ Checked all five pages at viewport widths of 375, 768, and 1280 pixels: no page-
 
 ## Current limitations
 
-This is a frontend demonstration, not a shop. The inherited configurator contains static prices, power figures, and a compatibility badge; selecting different components does not recalculate these values. Its checkout button has no order processing. The catalog and pre-built card links still use placeholder `#` destinations. Those features belong to the earlier participants' sections and need completion if the team intends to demonstrate them as functional. Sample product claims and prices are not verified shopping guidance.
+This is a frontend demonstration, not a shop. The configurator contains static prices, power figures, and a compatibility badge; selecting different components does not recalculate these values. Its checkout button has no order processing. The catalog and pre-built card links use placeholder `#` destinations. Sample product claims and prices are demonstration content.
 
-The contact form has no backend or email delivery. The repository is the only verified contact destination supplied for the team; no fictional address, phone number, or mailbox has been added.
+The contact form validates input locally and has no backend or email delivery. The contact page links to the team repository.
