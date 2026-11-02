@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plan a custom computer build or ask the PC Builder team for support.">
+    <title>PC Builder — Contact Us</title>
+    <link href="vendor/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html" style="color: var(--accent-color);">PC-BUILDER</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="builder.html">Configurator</a></li>
+                    <li class="nav-item"><a class="nav-link" href="catalog.html">Catalog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="prebuilt.html">Pre-built PCs</a></li>
+                    <li class="nav-item"><a aria-current="page" class="nav-link active" href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main id="main-content" class="container my-5">
+        <header class="contact-heading mb-5">
+            <p class="eyebrow mb-2">LET’S PLAN YOUR NEXT PC</p>
+            <h1 class="fw-bold">A build that fits your needs.</h1>
+            <p class="lead mb-0">Tell us what you play, create, or work on. Start your custom build request here.</p>
+        </header>
+        <div class="row g-4">
+            <section class="col-lg-8" aria-labelledby="request-heading">
+                <div class="contact-panel p-4 p-md-5">
+                    <h2 id="request-heading" class="h3 mb-2">Custom build &amp; support</h2>
+                    <p id="form-note" class="text-muted mb-4">Student project demo: this form validates your request locally. It does not send messages or place orders.</p>
+                    <form id="contact-form" aria-describedby="form-note">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="full-name" class="form-label">Full name <span aria-hidden="true">*</span></label>
+                                <input type="text" class="form-control" id="full-name" name="name" autocomplete="name" required maxlength="100" placeholder="Your name">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email address <span aria-hidden="true">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" autocomplete="email" required maxlength="254" placeholder="you@example.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="request-type" class="form-label">How can we help? <span aria-hidden="true">*</span></label>
+                                <select class="form-select" id="request-type" name="requestType" required>
+                                    <option value="">Choose a request</option>
+                                    <option value="custom">Custom PC build</option>
+                                    <option value="upgrade">Upgrade an existing PC</option>
+                                    <option value="support">Technical support</option>
+                                    <option value="other">General question</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="budget" class="form-label">Budget (USD, optional)</label>
+                                <select class="form-select" id="budget" name="budget">
+                                    <option value="">Not decided yet</option>
+                                    <option>Under $1,000</option>
+                                    <option>$1,000–$1,500</option>
+                                    <option>$1,500–$2,000</option>
+                                    <option>Over $2,000</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label">Tell us about your project <span aria-hidden="true">*</span></label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required minlength="10" maxlength="2000" aria-describedby="message-help" placeholder="Your games or apps, target resolution, existing components, and any questions…"></textarea>
+                                <div id="message-help" class="form-text">10–2,000 characters. Fields marked * are required.</div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-4 py-3">Check request</button>
+                            </div>
+                        </div>
+                    </form>
+                    <noscript><p class="mt-3">Enable JavaScript to use this local form demo. No submission service is connected.</p></noscript>
+                    <div id="form-status" class="form-status mt-4" role="status" aria-live="polite" hidden></div>
+                </div>
+            </section>
+            <aside class="col-lg-4" aria-labelledby="contact-heading">
+                <div class="contact-panel p-4 mb-4">
+                    <p class="eyebrow">PROJECT CONTACT</p>
+                    <h2 id="contact-heading" class="h4">PC Builder Team</h2>
+                    <p class="text-muted">A student project exploring custom computers, components, and ready-made builds.</p>
+                    <a href="https://github.com/Aleksizz-ctrl/pc-builder-site" class="contact-link">Find our project on GitHub &rarr;</a>
+                    <hr class="border-secondary my-4">
+                    <h3 class="h6">Before you start</h3>
+                    <ul class="text-muted ps-3 mb-0">
+                        <li class="mb-2">Choose your main games or applications.</li>
+                        <li class="mb-2">Set a budget for the computer.</li>
+                        <li>List components you already own.</li>
+                    </ul>
+                </div>
+                <div class="contact-panel p-4">
+                    <h2 class="h5">Prefer to explore first?</h2>
+                    <p class="text-muted">Compare complete PCs or browse individual components.</p>
+                    <a href="prebuilt.html" class="btn btn-outline-light w-100 mb-2">Compare pre-built PCs</a>
+                    <a href="catalog.html" class="contact-link d-block text-center py-2">Browse components &rarr;</a>
+                </div>
+            </aside>
+        </div>
+        <section class="faq-section mt-5" aria-labelledby="faq-heading">
+            <p class="eyebrow mb-2">A FEW HELPFUL ANSWERS</p>
+            <h2 id="faq-heading" class="mb-4">Frequently asked questions</h2>
+            <details class="faq-item">
+                <summary>What should I include in a custom build request?</summary>
+                <p>Include your budget, main games or applications, monitor resolution, and any parts you already own. Mention whether you also need a monitor or peripherals.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Can I upgrade my existing computer?</summary>
+                <p>Choose “Upgrade an existing PC” and list your processor, motherboard, memory, graphics card, power supply, and case. These details help assess potential upgrades.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Does the configurator verify compatibility?</summary>
+                <p>The current configurator is a layout demonstration with sample prices and power figures. Verify sockets, memory support, case dimensions, and power requirements before buying parts.</p>
+            </details>
+            <details class="faq-item">
+                <summary>Will this form send an order?</summary>
+                <p>No. This is a frontend course project. The form checks required fields and displays a local confirmation; it does not transmit or store your information.</p>
+            </details>
+        </section>
+    </main>
+<footer class="py-4 text-center border-top border-secondary mt-5">
+        <p class="mb-0 text-muted">&copy; 2026 PC Builder Team Project. All rights reserved.</p>
+    </footer>
+    <script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="contact.js"></script>
+</body>
+</html>
