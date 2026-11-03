@@ -23,6 +23,9 @@
                     <li class="nav-item"><a class="nav-link" href="catalog.html">Catalog</a></li>
                     <li class="nav-item"><a class="nav-link" href="prebuilt.html">Pre-built PCs</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+                    <li class="nav-item d-flex align-items-center">
+                        <button id="theme-toggle" type="button" class="btn btn-sm btn-outline-light ms-lg-3 mt-2 mt-lg-0">Light theme</button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -51,71 +54,39 @@
                     <tbody>
                         <tr>
                             <td><strong>Processor (CPU)</strong></td>
-                            <td>
-                                <select aria-label="Processor" class="form-select bg-dark text-white border-secondary">
-                                    <option value="320">Intel Core i5-13600K</option>
-                                    <option value="220">AMD Ryzen 5 7600X</option>
-                                    <option value="580">Intel Core i9-13900K</option>
-                                </select>
-                            </td>
-                            <td>125 W</td>
-                            <td>$320.00</td>
+                            <td><select aria-label="Processor" data-category="cpu" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                         <tr>
                             <td><strong>Graphics Card (GPU)</strong></td>
-                            <td>
-                                <select aria-label="Graphics card" class="form-select bg-dark text-white border-secondary">
-                                    <option value="599">NVIDIA RTX 4070 12GB</option>
-                                    <option value="499">AMD Radeon RX 7800 XT</option>
-                                    <option value="1599">NVIDIA RTX 4090 24GB</option>
-                                </select>
-                            </td>
-                            <td>200 W</td>
-                            <td>$599.00</td>
+                            <td><select aria-label="Graphics card" data-category="gpu" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                         <tr>
                             <td><strong>Motherboard</strong></td>
-                            <td>
-                                <select aria-label="Motherboard" class="form-select bg-dark text-white border-secondary">
-                                    <option value="180">ASUS TUF Gaming Z790-Plus</option>
-                                    <option value="210">MSI MAG B650 Tomahawk</option>
-                                </select>
-                            </td>
-                            <td>50 W</td>
-                            <td>$180.00</td>
+                            <td><select aria-label="Motherboard" data-category="motherboard" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                         <tr>
                             <td><strong>RAM</strong></td>
-                            <td>
-                                <select aria-label="Memory" class="form-select bg-dark text-white border-secondary">
-                                    <option value="120">Corsair Vengeance 32GB (2x16GB) DDR5</option>
-                                    <option value="70">Kingston Fury 16GB (2x8GB) DDR4</option>
-                                </select>
-                            </td>
-                            <td>15 W</td>
-                            <td>$120.00</td>
+                            <td><select aria-label="Memory" data-category="ram" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                         <tr>
                             <td><strong>Storage (SSD)</strong></td>
-                            <td>
-                                <select aria-label="Storage" class="form-select bg-dark text-white border-secondary">
-                                    <option value="110">Samsung 980 Pro 2TB NVMe M.2</option>
-                                    <option value="60">WD Black 1TB NVMe M.2</option>
-                                </select>
-                            </td>
-                            <td>10 W</td>
-                            <td>$110.00</td>
+                            <td><select aria-label="Storage" data-category="storage" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                         <tr>
                             <td><strong>Power Supply (PSU)</strong></td>
-                            <td>
-                                <select aria-label="Power supply" class="form-select bg-dark text-white border-secondary">
-                                    <option value="130">Corsair RM850x 850W Gold</option>
-                                    <option value="90">EVGA 750W Bronze</option>
-                                </select>
-                            </td>
-                            <td>-</td>
-                            <td>$130.00</td>
+                            <td><select aria-label="Power supply" data-category="psu" class="part-select form-select bg-dark text-white border-secondary"></select></td>
+                            <td class="power-cell"></td>
+                            <td class="price-cell"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -125,28 +96,34 @@
             <div class="col-lg-4">
                 <div class="summary-card">
                     <h3 class="h4 mb-3" style="color: var(--accent-color);">Build Summary</h3>
-                    
+
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Estimated Wattage:</span>
-                        <strong class="text-warning">400 W</strong>
+                        <strong class="text-warning" id="total-power">400 W</strong>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Recommended PSU:</span>
-                        <strong>650 W</strong>
+                        <strong id="recommended-psu">650 W</strong>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Compatibility Status:</span>
-                        <span class="badge bg-success">100% Compatible</span>
+                        <span class="badge bg-success" id="compat-badge">100% Compatible</span>
                     </div>
+                    <ul id="compat-messages" class="small text-warning ps-3 mb-2" aria-live="polite"></ul>
 
                     <hr class="border-secondary my-3">
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fs-5 fw-semibold">Total Price:</span>
-                        <span class="fs-3 fw-bold text-info">$1,459.00</span>
+                        <span class="fs-3 fw-bold text-info" id="total-price">$1,459.00</span>
                     </div>
 
-                    <button class="btn btn-primary w-100 py-2">Checkout Build</button>
+                    <button class="btn btn-primary w-100 py-2" type="button">Checkout Build</button>
+                    <button id="save-build" type="button" class="btn btn-outline-light w-100 py-2 mt-2">Save build</button>
+                    <p id="save-message" class="small mt-2 mb-0" role="status" aria-live="polite"></p>
+
+                    <h4 class="h6 mt-4">Saved builds</h4>
+                    <ul id="saved-builds" class="list-unstyled mb-0"></ul>
                 </div>
             </div>
         </div>
@@ -157,5 +134,7 @@
     </footer>
 
     <script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script src="builder.js"></script>
 </body>
 </html>
