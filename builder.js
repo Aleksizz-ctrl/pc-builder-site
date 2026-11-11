@@ -1,6 +1,6 @@
 'use strict';
 
-const components = [
+const componentData = [
     { id: 'i5-13600k', category: 'cpu', name: 'Intel Core i5-13600K', price: 320, power: 125, socket: 'LGA1700' },
     { id: 'r5-7600x', category: 'cpu', name: 'AMD Ryzen 5 7600X', price: 220, power: 105, socket: 'AM5' },
     { id: 'i9-13900k', category: 'cpu', name: 'Intel Core i9-13900K', price: 580, power: 253, socket: 'LGA1700' },
@@ -17,19 +17,181 @@ const components = [
     { id: 'evga-750', category: 'psu', name: 'EVGA 750W Bronze', price: 90, power: 0, watts: 750 }
 ];
 
-let savedBuilds = [];
-let buildCounter = 0;
-
 const PSU_HEADROOM = 1.6;
-const MAX_SAVED = 5;
+const MAX_SAVED = 10;
+const STORAGE_KEY = 'pc-builder-saved-builds';
+
+class Component {
+    constructor({ id, category, name, price, power, socket = null, watts = 0 }) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.price = price;
+        this.power = power;
+        this.socket = socket;
+        this.watts = watts;
+    }
+}
+
+const components = componentData.map((item) => new Component(item));
+
+function findComponent(id) {
+    return components.find((item) => item.id === id);
+}
 
 function getByCategory(category) {
     return components.filter((item) => item.category === category);
 }
 
-function findComponent(id) {
-    return components.find((item) => item.id === id);
+function formatPrice(value) {
+    return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+
+function money(usd) {
+    if (window.currencyService && typeof window.currencyService.format === 'function') {
+        return window.currencyService.format(usd);
+    }
+    return formatPrice(usd);
+}
+
+class PCBuild {
+    constructor(name, partIds = [], id = Date.now(), createdAt = new Date().toISOString()) {
+        this.id = id;
+        this.name = name;
+        this.partIds = partIds;
+        this.createdAt = createdAt;
+    }
+
+    getParts() {
+        return this.partIds.map((partId) => findComponent(partId)).filter(Boolean);
+    }
+
+    getTotalPrice() {
+        let total = 0;
+        for (const part of this.getParts()) {
+            total += part.price;
+        }
+        return total;
+    }
+
+    getTotalPower() {
+        let power = 0;
+        for (const part of this.getParts()) {
+            power += part.power;
+        }
+        return power;
+    }
+
+    getRecommendedPsu() {
+        return Math.ceil((this.getTotalPower() * PSU_HEADROOM) / 50) * 50;
+    }
+
+    checkCompatibility() {
+        const problems = [];
+        const parts = this.getParts();
+        const cpu = parts.find((part) => part.category === 'cpu');
+        const board = parts.find((part) => part.category === 'motherboard');
+        const psu = parts.find((part) => part.category === 'psu');
+
+        if (cpu && board && cpu.socket !== board.socket) {
+            problems.push(`CPU socket (${cpu.socket}) does not fit the motherboard (${board.socket}).`);
+        }
+        if (psu && psu.watts < this.getRecommendedPsu()) {
+            problems.push(`Power supply is too weak: ${this.getRecommendedPsu()} W recommended.`);
+        }
+        return problems;
+    }
+
+    rename(newName) {
+        this.name = newName;
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            partIds: this.partIds,
+            createdAt: this.createdAt
+        };
+    }
+
+    static fromJSON(data) {
+        return new PCBuild(data.name, data.partIds, data.id, data.createdAt);
+    }
+}
+
+class BuildStorage {
+    constructor(key) {
+        this.key = key;
+        this.builds = this.load();
+    }
+
+    load() {
+        try {
+            const raw = localStorage.getItem(this.key);
+            if (!raw) return [];
+            const data = JSON.parse(raw);
+            if (!Array.isArray(data)) return [];
+            return data
+                .filter((item) => item && typeof item.name === 'string' && Array.isArray(item.partIds))
+                .map((item) => PCBuild.fromJSON(item));
+        } catch (error) {
+            return [];
+        }
+    }
+
+    persist() {
+        try {
+            localStorage.setItem(this.key, JSON.stringify(this.builds));
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    getAll() {
+        return this.builds;
+    }
+
+    getById(id) {
+        return this.builds.find((build) => build.id === id);
+    }
+
+    isFull() {
+        return this.builds.length >= MAX_SAVED;
+    }
+
+    add(build) {
+        this.builds.push(build);
+        return this.persist();
+    }
+
+    rename(id, name) {
+        const build = this.getById(id);
+        if (!build) return false;
+        build.rename(name);
+        return this.persist();
+    }
+
+    updateParts(id, partIds) {
+        const build = this.getById(id);
+        if (!build) return false;
+        build.partIds = partIds;
+        return this.persist();
+    }
+
+    remove(id) {
+        this.builds = this.builds.filter((build) => build.id !== id);
+        return this.persist();
+    }
+
+    clear() {
+        this.builds = [];
+        return this.persist();
+    }
+}
+
+const storage = new BuildStorage(STORAGE_KEY);
 
 function fillSelect(select) {
     getByCategory(select.dataset.category).forEach((item) => {
@@ -40,70 +202,33 @@ function fillSelect(select) {
     });
 }
 
-function getSelectedParts() {
-    const parts = [];
-    document.querySelectorAll('.part-select').forEach((select) => {
-        parts.push(findComponent(select.value));
-    });
-    return parts;
+function getSelectedIds() {
+    return Array.from(document.querySelectorAll('.part-select')).map((select) => select.value);
 }
 
-function calculateTotal(parts) {
-    let total = 0;
-    for (const part of parts) {
-        total += part.price;
-    }
-    return total;
+function currentBuild() {
+    return new PCBuild('Current build', getSelectedIds());
 }
 
-function calculatePower(parts) {
-    let power = 0;
-    for (const part of parts) {
-        power += part.power;
-    }
-    return power;
-}
-
-function getRecommendedPsu(power) {
-    return Math.ceil((power * PSU_HEADROOM) / 50) * 50;
-}
-
-function formatPrice(value) {
-    return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function checkCompatibility(parts) {
-    const problems = [];
-    const cpu = parts.find((part) => part.category === 'cpu');
-    const board = parts.find((part) => part.category === 'motherboard');
-    const psu = parts.find((part) => part.category === 'psu');
-    const recommended = getRecommendedPsu(calculatePower(parts));
-
-    if (cpu.socket !== board.socket) {
-        problems.push(`CPU socket (${cpu.socket}) does not fit the motherboard (${board.socket}).`);
-    }
-    if (psu.watts < recommended) {
-        problems.push(`Power supply is too weak: ${recommended} W recommended.`);
-    }
-    return problems;
+function showMessage(text) {
+    document.querySelector('#save-message').textContent = text;
 }
 
 function updateRow(select) {
     const row = select.closest('tr');
     const part = findComponent(select.value);
     row.querySelector('.power-cell').textContent = part.power > 0 ? `${part.power} W` : '-';
-    row.querySelector('.price-cell').textContent = formatPrice(part.price);
+    row.querySelector('.price-cell').textContent = money(part.price);
 }
 
 function updateSummary() {
-    const parts = getSelectedParts();
-    const power = calculatePower(parts);
-    const problems = checkCompatibility(parts);
+    const build = currentBuild();
+    const problems = build.checkCompatibility();
     const isCompatible = problems.length === 0;
 
-    document.querySelector('#total-power').textContent = `${power} W`;
-    document.querySelector('#recommended-psu').textContent = `${getRecommendedPsu(power)} W`;
-    document.querySelector('#total-price').textContent = formatPrice(calculateTotal(parts));
+    document.querySelector('#total-power').textContent = `${build.getTotalPower()} W`;
+    document.querySelector('#recommended-psu').textContent = `${build.getRecommendedPsu()} W`;
+    document.querySelector('#total-price').textContent = money(build.getTotalPrice());
 
     const badge = document.querySelector('#compat-badge');
     badge.textContent = isCompatible ? '100% Compatible' : 'Issues found';
@@ -117,44 +242,139 @@ function updateSummary() {
         item.textContent = problem;
         messageList.appendChild(item);
     });
+
+    if (typeof renderStats === 'function') {
+        renderStats(build.getParts());
+    }
 }
 
 function createSavedItem(build) {
     const item = document.createElement('li');
-    item.className = 'd-flex justify-content-between align-items-center mb-2';
+    item.className = 'border-bottom border-secondary py-2';
 
-    const label = document.createElement('span');
-    label.textContent = `${build.name}: ${formatPrice(build.total)}`;
+    const title = document.createElement('div');
+    title.className = 'fw-semibold';
+    title.textContent = build.name;
 
-    const removeButton = document.createElement('button');
-    removeButton.type = 'button';
-    removeButton.className = 'btn btn-sm btn-outline-danger remove-build';
-    removeButton.dataset.id = build.id;
-    removeButton.textContent = 'Remove';
-    removeButton.setAttribute('aria-label', `Remove ${build.name}`);
+    const details = document.createElement('div');
+    details.className = 'small text-muted';
+    details.textContent = `${money(build.getTotalPrice())} | ${new Date(build.createdAt).toLocaleDateString('en-US')}`;
 
-    item.appendChild(label);
-    item.appendChild(removeButton);
+    const actions = document.createElement('div');
+    actions.className = 'd-flex flex-wrap gap-1 mt-1';
+
+    const buttons = [
+        { action: 'load', label: 'Load', style: 'btn-outline-info' },
+        { action: 'rename', label: 'Rename', style: 'btn-outline-light' },
+        { action: 'update', label: 'Update', style: 'btn-outline-warning' },
+        { action: 'delete', label: 'Delete', style: 'btn-outline-danger' }
+    ];
+
+    for (const config of buttons) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `btn btn-sm ${config.style}`;
+        button.dataset.action = config.action;
+        button.dataset.id = build.id;
+        button.textContent = config.label;
+        button.setAttribute('aria-label', `${config.label} ${build.name}`);
+        actions.appendChild(button);
+    }
+
+    item.append(title, details, actions);
     return item;
 }
 
-function saveBuild() {
-    const messageBox = document.querySelector('#save-message');
+function renderSaved() {
+    const list = document.querySelector('#saved-builds');
+    const builds = storage.getAll();
 
-    if (savedBuilds.length >= MAX_SAVED) {
-        messageBox.textContent = `You can save up to ${MAX_SAVED} builds. Remove one first.`;
+    list.innerHTML = '';
+    builds.forEach((build) => list.appendChild(createSavedItem(build)));
+
+    document.querySelector('#saved-empty').hidden = builds.length > 0;
+    document.querySelector('#clear-builds').disabled = builds.length === 0;
+}
+
+function refreshAll() {
+    document.querySelectorAll('.part-select').forEach((select) => updateRow(select));
+    updateSummary();
+    renderSaved();
+}
+
+function saveBuild() {
+    if (storage.isFull()) {
+        showMessage(`You can save up to ${MAX_SAVED} builds. Delete one first.`);
         return;
     }
 
-    buildCounter++;
-    const build = {
-        id: buildCounter,
-        name: `Build #${buildCounter}`,
-        total: calculateTotal(getSelectedParts())
+    const input = document.querySelector('#build-name');
+    const name = input.value.trim() || `Build #${storage.getAll().length + 1}`;
+    const saved = storage.add(new PCBuild(name, getSelectedIds()));
+
+    input.value = '';
+    renderSaved();
+    showMessage(saved ? `"${name}" saved.` : 'Could not save: browser storage is unavailable.');
+}
+
+function loadBuild(build) {
+    build.getParts().forEach((part) => {
+        const select = document.querySelector(`.part-select[data-category="${part.category}"]`);
+        if (select) select.value = part.id;
+    });
+    refreshAll();
+    showMessage(`"${build.name}" loaded.`);
+}
+
+function renameBuild(build) {
+    const newName = prompt('New name for this build:', build.name);
+    if (newName === null) return;
+
+    const trimmed = newName.trim();
+    if (trimmed === '') {
+        showMessage('Name cannot be empty.');
+        return;
+    }
+
+    storage.rename(build.id, trimmed);
+    renderSaved();
+    showMessage('Build renamed.');
+}
+
+function updateBuild(build) {
+    storage.updateParts(build.id, getSelectedIds());
+    renderSaved();
+    showMessage(`"${build.name}" updated with the current selection.`);
+}
+
+function deleteBuild(build) {
+    if (!confirm(`Delete "${build.name}"?`)) return;
+    storage.remove(build.id);
+    renderSaved();
+    showMessage('Build deleted.');
+}
+
+function clearBuilds() {
+    if (!confirm('Delete all saved builds?')) return;
+    storage.clear();
+    renderSaved();
+    showMessage('All saved builds deleted.');
+}
+
+function handleSavedClick(event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+
+    const build = storage.getById(Number(button.dataset.id));
+    if (!build) return;
+
+    const handlers = {
+        load: loadBuild,
+        rename: renameBuild,
+        update: updateBuild,
+        delete: deleteBuild
     };
-    savedBuilds.push(build);
-    document.querySelector('#saved-builds').appendChild(createSavedItem(build));
-    messageBox.textContent = `${build.name} saved.`;
+    handlers[button.dataset.action](build);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -166,17 +386,12 @@ document.addEventListener('DOMContentLoaded', () => {
             updateRow(select);
             updateSummary();
         });
-        updateRow(select);
     });
-    updateSummary();
 
     document.querySelector('#save-build').addEventListener('click', saveBuild);
+    document.querySelector('#clear-builds').addEventListener('click', clearBuilds);
+    document.querySelector('#saved-builds').addEventListener('click', handleSavedClick);
+    document.addEventListener('currencychange', refreshAll);
 
-    document.querySelector('#saved-builds').addEventListener('click', (event) => {
-        if (!event.target.classList.contains('remove-build')) return;
-        const id = Number(event.target.dataset.id);
-        savedBuilds = savedBuilds.filter((build) => build.id !== id);
-        event.target.closest('li').remove();
-        document.querySelector('#save-message').textContent = 'Build removed.';
-    });
+    refreshAll();
 });
