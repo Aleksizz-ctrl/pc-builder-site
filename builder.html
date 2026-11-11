@@ -91,6 +91,8 @@
                     </tbody>
                 </table>
                 </div>
+
+                <section id="stats-panel" class="mt-4" aria-label="Build statistics"></section>
             </div>
 
             <div class="col-lg-4">
@@ -119,11 +121,18 @@
                     </div>
 
                     <button class="btn btn-primary w-100 py-2" type="button">Checkout Build</button>
+
+                    <label for="build-name" class="form-label mt-3 mb-1">Build name (optional)</label>
+                    <input type="text" id="build-name" class="form-control bg-dark text-white border-secondary" maxlength="40" placeholder="My gaming PC">
                     <button id="save-build" type="button" class="btn btn-outline-light w-100 py-2 mt-2">Save build</button>
                     <p id="save-message" class="small mt-2 mb-0" role="status" aria-live="polite"></p>
 
-                    <h4 class="h6 mt-4">Saved builds</h4>
-                    <ul id="saved-builds" class="list-unstyled mb-0"></ul>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <h4 class="h6 mb-0">Saved builds</h4>
+                        <button id="clear-builds" type="button" class="btn btn-sm btn-outline-danger">Clear all</button>
+                    </div>
+                    <p id="saved-empty" class="small text-muted mt-2 mb-0">No saved builds yet.</p>
+                    <ul id="saved-builds" class="list-unstyled mt-2 mb-0"></ul>
                 </div>
             </div>
         </div>
