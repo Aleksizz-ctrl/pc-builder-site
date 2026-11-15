@@ -16,7 +16,25 @@ const products = [
     { id: 12, name: 'Corsair RM750e 750W', category: 'Power Supply', price: 109, image: 'images/PSU-image.jfif', description: 'Reliable 750W power supply for gaming PCs.' }
 ];
 
+const FAVORITES_KEY = 'pc-builder-favorites';
 let favorites = [];
+
+function loadFavorites() {
+    try {
+        const savedIds = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+        return products.filter(product => savedIds.includes(product.id));
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveFavorites() {
+    try {
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites.map(product => product.id)));
+    } catch (error) {
+        console.warn('Favorites could not be saved.', error);
+    }
+}
 
 function renderProducts(list) {
     const productGrid = document.querySelector('#product-grid');
@@ -36,7 +54,7 @@ function renderProducts(list) {
             <div class="product-info">
                 <h5 class="card-title">${product.name}</h5>
                 <p class="card-text">${product.description}</p>
-                <p><strong>$${product.price}</strong></p>
+                <p><strong><span data-usd="${product.price}">$${product.price}</span></strong></p>
                 <p class="text-muted">${product.category}</p>
                 <button type="button" class="btn ${isFavorite ? 'btn-success' : 'btn-primary'} favorite-button" data-id="${product.id}">
                     ${isFavorite ? 'Added to favorites' : 'Add to favorites'}
@@ -79,6 +97,7 @@ function toggleFavorite(id) {
         favorites.splice(favoriteIndex, 1);
     }
 
+    saveFavorites();
     renderFavorites();
     updateCatalog();
 }
@@ -99,7 +118,7 @@ function renderFavorites() {
         const item = document.createElement('li');
         item.className = 'list-group-item d-flex justify-content-between align-items-center';
         item.innerHTML = `
-            <span>${product.name} — $${product.price}</span>
+            <span>${product.name} — <span data-usd="${product.price}">$${product.price}</span></span>
             <button type="button" class="btn btn-sm btn-outline-danger remove-favorite" data-id="${product.id}">Remove</button>
         `;
         favoritesList.appendChild(item);
@@ -140,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleFavorite(Number(button.dataset.id));
     });
 
+    favorites = loadFavorites();
     renderFavorites();
     updateCatalog();
 });

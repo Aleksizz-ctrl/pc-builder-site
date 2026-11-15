@@ -48,8 +48,8 @@ function formatPrice(value) {
 }
 
 function money(usd) {
-    if (window.currencyService && typeof window.currencyService.format === 'function') {
-        return window.currencyService.format(usd);
+    if (window.currencyService && typeof window.currencyService.formatPrice === 'function') {
+        return window.currencyService.formatPrice(usd);
     }
     return formatPrice(usd);
 }
@@ -391,7 +391,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#save-build').addEventListener('click', saveBuild);
     document.querySelector('#clear-builds').addEventListener('click', clearBuilds);
     document.querySelector('#saved-builds').addEventListener('click', handleSavedClick);
-    document.addEventListener('currencychange', refreshAll);
+
+    const currencySelect = document.querySelector('#currency-select');
+    if (currencySelect) {
+        currencySelect.addEventListener('change', refreshAll);
+    }
+
+    const currencyStatus = document.querySelector('#currency-status');
+    if (currencyStatus) {
+        const statusObserver = new MutationObserver(() => refreshAll());
+        statusObserver.observe(currencyStatus, {
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+    }
 
     refreshAll();
 });

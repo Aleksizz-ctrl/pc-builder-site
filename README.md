@@ -60,7 +60,23 @@ Products are stored in a JavaScript array and displayed dynamically.
 | `renderFavorites()` | Updates the favorites list and counter. |
 | `updateCatalog()` | Applies the current search, filter and sorting settings. |
 
-Favorites are stored in JavaScript memory and reset when the page is reloaded.
+Favorites are stored in `localStorage` under `pc-builder-favorites` and remain available after reloading the page.
+
+## Currency Converter
+
+The Catalog and Pre-built PCs pages share `currency.js`, which loads the latest exchange rates from ExchangeRate-API using `fetch()`.
+
+- `CurrencyService.fetchRates()` requests rates with `async/await`, checks `response.ok` and handles request errors.
+- Exchange rates are cached in `localStorage` under `pc-builder-currency-rates`.
+- If the request fails, previously saved rates are used when available.
+- The currency selector is created dynamically in the navbar; no other page HTML needs to be edited for the selector.
+- The selected currency is saved under `pc-builder-selected-currency`.
+- Product and pre-built PC prices are converted from their original USD values whenever the selected currency changes.
+- The selector options are generated from `Object.keys(rates)`.
+- The navbar status displays loading, success, missing-data or error/fallback information.
+- The page footer credits ExchangeRate-API.
+
+The conversion is display-only: the original product prices remain in USD in the page data.
 
 ## Pre-built PCs Features
 
