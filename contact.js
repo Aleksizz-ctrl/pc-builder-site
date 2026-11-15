@@ -55,6 +55,28 @@
         { field: form.elements.message, validate: validateMessage }
     ];
 
+    const draftKey = 'pc-builder-contact-draft';
+    const draftFields = [...fields.map(({ field }) => field), form.elements.budget];
+
+    try {
+        const draft = JSON.parse(localStorage.getItem(draftKey));
+        draftFields.forEach((field) => {
+            if (typeof draft?.[field.name] === 'string') field.value = draft[field.name];
+        });
+    } catch {
+        // The form remains usable with missing or invalid storage.
+    }
+
+    function saveDraft() {
+        try {
+            const draft = Object.fromEntries(draftFields.map(({ name, value }) => [name, value]));
+            if (Object.values(draft).some(Boolean)) localStorage.setItem(draftKey, JSON.stringify(draft));
+            else localStorage.removeItem(draftKey);
+        } catch {
+            // Keep validation available when storage is blocked.
+        }
+    }
+
     function showError(field, error) {
         document.querySelector(`#${field.id}-error`).textContent = error;
         field.classList.toggle('is-invalid', Boolean(error));
@@ -103,7 +125,7 @@
         form.reset();
         updateCounter();
         // textContent keeps the user's name as text, rather than executable HTML.
-        status.textContent = `Thank you, ${name}! Your request passed validation. This student demo does not send or save messages.`;
+        status.textContent = `Thank you, ${name}! Your request passed local validation. No message was sent.`;
         status.classList.add('is-success');
         status.hidden = false;
     });
@@ -115,6 +137,7 @@
 
     form.addEventListener('input', (event) => {
         status.hidden = true;
+        saveDraft();
         const entry = fields.find(({ field }) => field === event.target);
         if (entry && touched.has(entry.field)) validateField(entry);
         // An edited original email can invalidate an already confirmed address.
@@ -124,6 +147,11 @@
     });
 
     form.addEventListener('reset', () => {
+        try {
+            localStorage.removeItem(draftKey);
+        } catch {
+            // Reset the visible form even when storage is blocked.
+        }
         clearFeedback();
         // The reset event fires before the browser clears the field values.
         counter.textContent = '0 / 2,000 characters';
