@@ -244,7 +244,7 @@ function updateSummary() {
     });
 
     if (typeof renderStats === 'function') {
-        renderStats(build.getParts());
+        renderStats(build);
     }
 }
 

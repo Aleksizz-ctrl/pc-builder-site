@@ -18,6 +18,20 @@ A responsive five-page website for exploring PC components, comparing pre-built 
 | Pre-built PCs | Ready-made PC configurations with expandable specifications and comparison table. |
 | Contact Us | Contact form with custom validation, FAQ accordion and Back to Top button. |
 
+## New final features
+
+- The configurator shows each selected component's share of build price and estimated power consumption.
+- **A− / A+** in the navbar changes text size from 90% to 120%. The preference persists across pages and reloads.
+- Contact Us restores unfinished form fields from this browser. Successful local validation clears the draft.
+
+## API information
+
+This revision uses local component data and has no live data or contact submission endpoint. Bootstrap is bundled and jQuery 3.7.1 is loaded from the jQuery CDN.
+
+The configurator calls `renderStats(build)` from `updateSummary()` and renders into `#stats-panel`. It reads `getParts()`, `getTotalPrice()` and `getTotalPower()` on a `PCBuild`. Power share uses the `power` field in watts. PSU capacity is recorded separately as `watts`.
+
+Browser storage keys include `pc-builder-font-size` for the text-size preference and `pc-builder-contact-draft` for the unfinished form.
+
 ## Catalog Features
 
 The Catalog page contains 12 sample PC components, including CPUs, GPUs, RAM, storage devices, motherboards and power supplies.
@@ -127,6 +141,7 @@ Only one PC configuration can be expanded at a time.
 - Added a dynamically created Back to Top button.
 - Improved responsive design and accessibility.
 - Updated project documentation.
+- Added contact drafts, navbar text-size controls and build statistics.
 
 ## How to Run Locally
 
@@ -157,6 +172,21 @@ http://localhost:8000
 You can also open `index.html` directly in your browser.
 
 ## Testing Checklist
+
+### Final features
+
+| Feature | How to test |
+| ------- | ----------- |
+| Build statistics | Open Configurator and change the GPU. Check that the two groups update with the summary and that each group totals about 100% after rounding. The PSU contributes to price and shows 0% in the power group. Save and load a different build and check that the bars update again. |
+| Text size | Use A+ and A−, refresh, and visit another page. Verify that the selected size persists and that the corresponding button is disabled at each limit. Open the mobile menu to reach the controls on smaller screens. |
+| Contact draft | Enter text and choose a request type and budget. Reload and verify the values and counter. Attempt an invalid submission and reload to check that the draft remains. Fill in valid values and submit. Reload and verify all fields and the counter are cleared. |
+
+### Endterm regression checks
+
+- On Home, navigate to each page and toggle the theme. Verify that the theme persists on reload.
+- In Configurator, verify totals, an incompatible CPU and motherboard, and a weak PSU. Save, load, rename, update, delete and clear test builds.
+- On Contact Us, verify field errors, first-invalid-field focus, the message counter, the FAQ accordion and Back to Top.
+- Open DevTools Console on all five pages. Exercise their controls and watch for errors. Check the navbar and table scrolling at 320 px, 375 px and desktop widths.
 
 ### Catalog
 1. Search for a product by name.
