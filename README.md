@@ -123,7 +123,7 @@ Only one PC configuration can be expanded at a time.
 
 ### Altair — Catalog and Pre-built PCs
 
-**Main files:** `catalog.html`, `catalog.js`, `prebuilt.html`, `prebuilt.js`, `currency.js`.
+**Main files:** `catalog.html`, `catalog.js`, `prebuilt.html`, `prebuilt.js`, `currency.js`, `styles.css`.
 
 - Implemented the exchange-rate API and persistent currency selection.
 
@@ -152,7 +152,7 @@ Only one PC configuration can be expanded at a time.
 
 ### Daryn — Contact Form and UI
 
-**Main files:** `contact.html`, `contact.js`, `ui.js`, `a11y.js`, `stats.js`, `styles.css`, `README.md`.
+**Main files:** `contact.html`, `contact.js`, `ui.js`, `a11y.js`, `stats.js`, `README.md`.
 
 - Implemented custom form validation.
 - Added email confirmation and field-specific error messages.
