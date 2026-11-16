@@ -305,3 +305,15 @@ body.light-theme .contact-panel .form-select { --bs-form-select-bg-img: url("dat
     .faq-question { padding: 18px; }
     .back-to-top { right: .75rem; bottom: .75rem; }
 }
+
+.currency-control {
+    min-width: 0;
+}
+
+.currency-control #currency-status {
+    overflow-wrap: anywhere;
+}
+
+@media (min-width: 992px) {
+    .navbar-collapse.has-currency-control { flex-wrap: wrap; }
+}

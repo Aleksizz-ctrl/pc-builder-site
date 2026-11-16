@@ -115,7 +115,7 @@ class CurrencyService {
         if (!navbar || !navCollapse) return;
 
         const wrapper = document.createElement('div');
-        wrapper.className = 'd-flex align-items-center gap-2 ms-lg-3 mt-3 mt-lg-0';
+        wrapper.className = 'currency-control d-flex flex-wrap align-items-center gap-2 ms-lg-3 my-2';
         wrapper.innerHTML = `
             <label class="text-muted small mb-0" for="currency-select">Currency</label>
             <select class="form-select form-select-sm" id="currency-select" aria-label="Select currency" style="width: auto; min-width: 105px;">
@@ -124,6 +124,7 @@ class CurrencyService {
             <span id="currency-status" class="small text-muted" role="status" aria-live="polite">Loading exchange rates...</span>
         `;
 
+        navCollapse.classList.add('has-currency-control');
         navCollapse.appendChild(wrapper);
         this.statusElement = wrapper.querySelector('#currency-status');
         const select = wrapper.querySelector('#currency-select');

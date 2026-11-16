@@ -20,13 +20,16 @@ A responsive five-page website for exploring PC components, comparing pre-built 
 
 ## New final features
 
+- Live USD exchange rates with a shared currency selector and offline fallback.
+- Saved build management using the configurator’s JavaScript classes and browser storage.
+- Catalog favorites persist between visits.
 - The configurator shows each selected component's share of build price and estimated power consumption.
 - **A− / A+** in the navbar changes text size from 90% to 120%. The preference persists across pages and reloads.
 - Contact Us restores unfinished form fields from this browser. Successful local validation clears the draft.
 
 ## API information
 
-This revision uses local component data and has no live data or contact submission endpoint. Bootstrap is bundled and jQuery 3.7.1 is loaded from the jQuery CDN.
+The site fetches live USD exchange rates from [ExchangeRate-API](https://www.exchangerate-api.com) at `https://open.er-api.com/v6/latest/USD`. Component data is local, and the contact form validates requests in the browser.
 
 The configurator calls `renderStats(build)` from `updateSummary()` and renders into `#stats-panel`. It reads `getParts()`, `getTotalPrice()` and `getTotalPower()` on a `PCBuild`. Power share uses the `power` field in watts. PSU capacity is recorded separately as `watts`.
 
@@ -64,12 +67,12 @@ Favorites are stored in `localStorage` under `pc-builder-favorites` and remain a
 
 ## Currency Converter
 
-The Catalog and Pre-built PCs pages share `currency.js`, which loads the latest exchange rates from ExchangeRate-API using `fetch()`.
+`currency.js` loads rates on all five pages. It converts prices in Catalog, Configurator, and Pre-built PCs.
 
 - `CurrencyService.fetchRates()` requests rates with `async/await`, checks `response.ok` and handles request errors.
 - Exchange rates are cached in `localStorage` under `pc-builder-currency-rates`.
 - If the request fails, previously saved rates are used when available.
-- The currency selector is created dynamically in the navbar; no other page HTML needs to be edited for the selector.
+- The script creates the currency selector in the navbar on each page.
 - The selected currency is saved under `pc-builder-selected-currency`.
 - Product and pre-built PC prices are converted from their original USD values whenever the selected currency changes.
 - The selector options are generated from `Object.keys(rates)`.
@@ -120,7 +123,9 @@ Only one PC configuration can be expanded at a time.
 
 ### Altair — Catalog and Pre-built PCs
 
-**Main files:** `catalog.html`, `catalog.js`, `prebuilt.html`, `prebuilt.js`.
+**Main files:** `catalog.html`, `catalog.js`, `prebuilt.html`, `prebuilt.js`, `currency.js`.
+
+- Implemented the exchange-rate API and persistent currency selection.
 
 - Created the interactive PC component catalog.
 - Added 12 products using a JavaScript array.
@@ -147,7 +152,7 @@ Only one PC configuration can be expanded at a time.
 
 ### Daryn — Contact Form and UI
 
-**Main files:** `contact.html`, `contact.js`, `ui.js`, `styles.css`.
+**Main files:** `contact.html`, `contact.js`, `ui.js`, `a11y.js`, `stats.js`, `styles.css`, `README.md`.
 
 - Implemented custom form validation.
 - Added email confirmation and field-specific error messages.
@@ -193,6 +198,8 @@ You can also open `index.html` directly in your browser.
 
 | Feature | How to test |
 | ------- | ----------- |
+| Currency API | Watch the navbar status on reload. Select KZT and check prices on Catalog, Configurator, and Pre-built PCs. Confirm that KZT stays selected on Home and Contact Us. After a successful load, use DevTools to block the API endpoint and reload to check the saved-rate fallback. To check the empty state locally, override the response with `{"result":"success","rates":{}}`. |
+| Saved builds | Save a named build, reload, then load, rename, update and delete the test build. |
 | Build statistics | Open Configurator and change the GPU. Check that the two groups update with the summary and that each group totals about 100% after rounding. The PSU contributes to price and shows 0% in the power group. Save and load a different build and check that the bars update again. |
 | Text size | Use A+ and A−, refresh, and visit another page. Verify that the selected size persists and that the corresponding button is disabled at each limit. Open the mobile menu to reach the controls on smaller screens. |
 | Contact draft | Enter text and choose a request type and budget. Reload and verify the values and counter. Attempt an invalid submission and reload to check that the draft remains. Fill in valid values and submit. Reload and verify all fields and the counter are cleared. |
@@ -211,7 +218,7 @@ You can also open `index.html` directly in your browser.
 4. Search for a nonexistent product and check the empty-state message.
 5. Add products to Favorites.
 6. Remove products from both the catalog and favorites list.
-7. Check that the favorites counter updates correctly.
+7. Reload with a favorite selected and check that the saved favorite and counter persist.
 
 ### Pre-built PCs
 1. Click View Build on each PC card.
@@ -227,4 +234,3 @@ Test the website at desktop and mobile widths, including 320px and 375px. Check 
 
 This is a student coursework project. Product prices and specifications are demonstration data and are not intended as real purchasing recommendations.
 
-The catalog favorites list is not connected to a database and does not persist after a page reload.
